@@ -15,15 +15,17 @@ public class SliderController : MonoBehaviour
     [SerializeField] float sliderValue = 0f; //실린더가 멈춘 위치
     public float sValue => sliderValue; //위의 변수를 외부에서 참고하기 위해 만든 퍼블릭 변수. 이렇게 하면 외부에서 값 수정이 불가능하다.
 
+    [SerializeField] private ArrowController arrowController;
     public event EventHandler OnSliderStop; //이벤트 생성
+
+    void Start()
+    {
+        arrowController.OnArrowStop += HandleArrowStop;
+    }
 
     void Update()
     {
-        if (isSliderPingPong == false && Input.GetKeyDown(KeyCode.Space)) //슬라이더가 움직이지 않고 있고, 스페이스바가 눌렸다면
-        {
-            isSliderPingPong = true;
-        }
-        else if (isSliderPingPong == true && Input.GetKeyDown(KeyCode.Space)) //또는 슬라이더가 움직이고 있고 스페이스바가 눌렸다면.
+        if (isSliderPingPong == true && Input.GetKeyDown(KeyCode.Space)) //또는 슬라이더가 움직이고 있고 스페이스바가 눌렸다면.
         {
             isSliderPingPong = false;
             PingPongStop();
@@ -41,5 +43,10 @@ public class SliderController : MonoBehaviour
     {
         sliderValue = slider.value; //슬라이더의 현 위치를 저장한다.
         OnSliderStop?.Invoke(this, EventArgs.Empty); //이벤트를 호출한다.
+    }
+
+    void HandleArrowStop(object Arrow, EventArgs e)
+    {
+        isSliderPingPong = true;
     }
 }
