@@ -16,11 +16,13 @@ public class SliderController : MonoBehaviour
     public float sValue => sliderValue; //위의 변수를 외부에서 참고하기 위해 만든 퍼블릭 변수. 이렇게 하면 외부에서 값 수정이 불가능하다.
 
     [SerializeField] private ArrowController arrowController;
+    [SerializeField] private GameDirector gameDirector;
     public event EventHandler OnSliderStop; //이벤트 생성
 
     void Start()
     {
         arrowController.OnArrowStop += HandleArrowStop;
+        gameDirector.OnReset += HandleReset;
     }
 
     void Update()
@@ -48,5 +50,12 @@ public class SliderController : MonoBehaviour
     void HandleArrowStop(object Arrow, EventArgs e)
     {
         isSliderPingPong = true;
+    }
+
+    void HandleReset(object GameDirector, EventArgs e)
+    {
+        isSliderPingPong = false;
+        newXPosition = 0f;
+        slider.value = 0f;
     }
 }

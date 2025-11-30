@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Unity.VisualScripting;
 using UnityEditor.Callbacks;
+using UnityEditor.Experimental.GraphView;
 
 public class CarController : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class CarController : MonoBehaviour
 
     [SerializeField] private SliderController sliderController; //해당 컴포넌트(스크립트)를 가진 오브젝트를 인스펙터 창에서 연결한다 
     [SerializeField] private ArrowController arrowController;
+    [SerializeField] private GameDirector gameDirector;
 
     Rigidbody2D rigidbody2d;
 
@@ -20,6 +22,7 @@ public class CarController : MonoBehaviour
         rigidbody2d = GetComponent<Rigidbody2D>();
         Application.targetFrameRate = 60; //프레임 설정
         sliderController.OnSliderStop += HandleSliderStop; // 이벤트를 구독한다.
+        gameDirector.OnReset += HandleReset;
     }
 
     void Update()
@@ -46,4 +49,11 @@ public class CarController : MonoBehaviour
         rigidbody2d.AddForce(dir * forcePower, ForceMode2D.Impulse);
     }
 
+    void HandleReset(object GameDirector, EventArgs e)
+    {
+        speed = 0f;
+        forcePower = 0f;
+        rigidbody2d.linearVelocity = Vector2.zero;
+        transform.position = new Vector3(-7, -3, 0);
+    }
 }

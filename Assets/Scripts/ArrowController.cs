@@ -9,14 +9,15 @@ using Unity.VisualScripting;
 public class ArrowController : MonoBehaviour
 {
     bool isRotaringAngle = true;
-    [SerializeField] float angle = 0;
+    [SerializeField] float angle = 0f;
     public float Angle => angle;
 
+    [SerializeField] private GameDirector gameDirector;
     public event EventHandler OnArrowStop;
 
     void Start()
     {
-
+        gameDirector.OnReset += HandleReset;
     }
 
     void Update()
@@ -45,5 +46,11 @@ public class ArrowController : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(0, 0, angle);
         }
+    }
+
+    void HandleReset(object GameDirector, EventArgs e)
+    {
+        isRotaringAngle = true;
+        angle = 0f;
     }
 }
